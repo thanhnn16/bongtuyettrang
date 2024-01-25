@@ -1,10 +1,11 @@
+drop database if exists `btt_dev`;
 create database if not exists `btt_dev` default character set utf8 collate utf8_general_ci;
 
 use btt_dev;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    full_name VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) NOT NULL DEFAULT 'User',
     phone_number VARCHAR(20) UNIQUE,
     email VARCHAR(255) UNIQUE,
     dob DATE,
@@ -21,7 +22,8 @@ CREATE TABLE users (
 
 CREATE TABLE product_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE products (
@@ -37,7 +39,8 @@ CREATE TABLE products (
 
 CREATE TABLE service_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE services (

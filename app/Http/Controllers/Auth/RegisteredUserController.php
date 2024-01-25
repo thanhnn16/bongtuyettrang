@@ -35,14 +35,14 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse|Application|JsonResponse
     {
         $request->validate([
-            'phone_number' => 'required|string|max:20|unique:'.User::class,
-            'email' => 'nullable|string|lowercase|email|max:255|unique:'.User::class,
-            'full_name' => $request->full_name ?? $request->phone_number,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone_number' => 'required|string|max:20|unique:users',
+            'email' => 'nullable|string|lowercase|email|max:255|unique:users',
+            'password' => ['required', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'full_name' => $request->full_name,
+            'phone_number' => $request->phone_number,
+            'full_name' => $request->phone_number,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -54,7 +54,7 @@ class RegisteredUserController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'token' => $user->createToken('auth_token')->plainTextToken,
-                'user' => $user,
+                'userId' => $user->id,
             ]);
         }else{
             return redirect(RouteServiceProvider::HOME);
