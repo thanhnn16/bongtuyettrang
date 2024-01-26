@@ -14,11 +14,11 @@ class ProductController extends Controller
     {
         if (request()->wantsJson()) {
             return response()->json([
-                'products' => Product::with('productType')->get(),
+                'products' => Product::with(['productType', 'productImages'])->get(),
             ]);
         }
         return inertia('Products/Index', [
-            'products' => Product::with('productType')->get(),
+            'products' => Product::with(['productType', 'productImages'])->get(),
         ]);
     }
 
@@ -45,11 +45,11 @@ class ProductController extends Controller
     {
         if (request()->wantsJson()) {
             return response()->json([
-                'product' => $product->load('productType'),
+                'product' => $product->load(['productType', 'productImages']),
             ]);
         }
         return inertia('Products/Show', [
-            'product' => $product->load('productType'),
+            'product' => $product->load(['productType', 'productImages']),
         ]);
     }
 

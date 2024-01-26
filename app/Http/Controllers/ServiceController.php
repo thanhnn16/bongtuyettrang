@@ -13,10 +13,10 @@ class ServiceController extends Controller
     public function index()
     {
         if (request()->wantsJson()) {
-            return Service::with('serviceType')->get();
+            return Service::with(['serviceType', 'serviceImages'])->get();
         }
         return inertia('Services/Index', [
-            'services' => Service::with('serviceType')->get(),
+            'services' => Service::with(['serviceType', 'serviceImages'])->get(),
         ]);
     }
 
@@ -43,11 +43,11 @@ class ServiceController extends Controller
     {
         if (request()->wantsJson()) {
             return response()->json([
-                'service' => $service->load('serviceType'),
+                'service' => $service->load(['serviceType', 'serviceImages']),
             ]);
         }
         return inertia('Services/Show', [
-            'service' => $service->load('serviceType'),
+            'service' => $service->load(['serviceType', 'serviceImages']),
         ]);
     }
 

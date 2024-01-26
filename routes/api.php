@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
 Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::post('check-phone-number', [RegisteredUserController::class, 'checkPhoneNumber'])->name('check-phone-number');
 
 Route::get('products', [ProductController::class, 'index'])->name('products.index');
 Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');

@@ -27,6 +27,19 @@ class RegisteredUserController extends Controller
         return Inertia::render('Auth/Register');
     }
 
+    public function checkPhoneNumber(Request $request): JsonResponse
+    {
+        $user = User::where('phone_number', $request->phone_number)->first();
+        if ($user) {
+            return response()->json([
+                'message' => 'Phone number already exists',
+            ]);
+        }
+        return response()->json([
+            'message' => 'Phone number is available',
+        ]);
+    }
+
     /**
      * Handle an incoming registration request.
      *
@@ -56,7 +69,7 @@ class RegisteredUserController extends Controller
                 'token' => $user->createToken('auth_token')->plainTextToken,
                 'userId' => $user->id,
             ]);
-        }else{
+        } else {
             return redirect(RouteServiceProvider::HOME);
         }
     }
