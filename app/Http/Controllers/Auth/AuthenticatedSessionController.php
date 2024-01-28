@@ -33,15 +33,15 @@ class AuthenticatedSessionController extends Controller
     {
         if ($request->wantsJson()) {
             if (!Auth::attempt($request->only('phone_number', 'password'), $request->filled('remember'))) {
-                return back()->withErrors([
-                    'phone_number' => 'The provided credentials do not match our records.',
-                ]);
+                return response()->json([
+                    'message' => 'Login failed.',
+                ], 401);
             }
+
             $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-            if (!empty($user->id)) {
-                $UID = $user->id;
-            }
+
+            $token = $user->createToken('authToken')->plainTextToken;
+            $UID = $user->id;
             return response()->json([
                 'message' => 'Authenticated.',
                 'token' => $token,

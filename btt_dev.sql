@@ -30,9 +30,8 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    image VARCHAR(255),
     price DECIMAL(10, 2),
-    status VARCHAR(255),
+    status VARCHAR(255) default 'available',
     product_type_id INT,
     FOREIGN KEY (product_type_id) REFERENCES product_types(id)
 );
@@ -84,14 +83,14 @@ CREATE TABLE inventory (
 CREATE TABLE product_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
-    image VARCHAR(255),
+    images VARCHAR(255),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
 CREATE TABLE service_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     service_id INT,
-    image VARCHAR(255),
+    images VARCHAR(255),
     FOREIGN KEY (service_id) REFERENCES services(id)
 );
 
