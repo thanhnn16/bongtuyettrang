@@ -29,26 +29,9 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): JsonResponse|RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
-        if ($request->wantsJson()) {
-            if (!Auth::attempt($request->only('phone_number', 'password'), $request->filled('remember'))) {
-                return response()->json([
-                    'message' => 'Login failed.',
-                ], 401);
-            }
-
-            $user = Auth::user();
-
-            $token = $user->createToken('authToken')->plainTextToken;
-            $UID = $user->id;
-            return response()->json([
-                'message' => 'Authenticated.',
-                'token' => $token,
-                'userId' => $UID,
-            ], 200);
-        }
-
+        
         $request->authenticate();
 
         $request->session()->regenerate();
