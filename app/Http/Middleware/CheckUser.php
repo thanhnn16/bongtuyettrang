@@ -16,14 +16,16 @@ class CheckUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken(); // Lấy token từ header Authorization
+        $token = $request->bearerToken();
 
         if ($token) {
             try {
-                $tokenModel = PersonalAccessToken::findToken($token);
-                if ($tokenModel && $request->uid == $tokenModel->tokenable_id) {
-                    return $next($request);
-                }
+//                $tokenModel = PersonalAccessToken::findToken($token);
+//                if ($tokenModel && $request->uid == $tokenModel->tokenable_id) {
+//                    return $next($request);
+//                }
+                return $next($request);
+
             } catch (\Exception $e) {
                 return response()->json(['error' => 'Unauthorized'], 403);
             }

@@ -31,7 +31,6 @@ Route::get('products/{product}', [ProductController::class, 'show'])->name('prod
 Route::get('services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
-
 // Authorization = Bearer [API token]
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware('checkUser');
