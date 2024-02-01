@@ -19,7 +19,7 @@ class UserController extends Controller
         }
         $user = Auth::user();
         $token = $user->createToken('mobileAppToken')->plainTextToken;
-        
+
         $UID = $user->id;
         return response()->json([
             'message' => 'Authenticated.',
@@ -44,7 +44,7 @@ class UserController extends Controller
 
     public function update(Request $request): JsonResponse
     {
-        $user = User::find($request->id);
+        $user = User::find($request->uid);
         $currentDateTimestamp = strtotime(date('Y-m-d'));
         if ($user) {
             try {
@@ -67,7 +67,39 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'message' => 'User not found',
+                'request' => $request->uid,
             ], 404);
+        }
+    }
+
+    public function uploadAvatar(Request $request): JsonResponse
+    {
+        $request->validate([
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+        ]);
+
+        $user = $request->user();
+
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            $avatar->storeAs('avatars', $filename, 'public');
+
+            $user->avatar = $filename;
+            $user->save();
+
+            $avatarUrl = asset('storage/avatars/'.$filename);
+
+
+            return response()->json([
+                'message' => 'Avatar uploaded successfully',
+                'avatar' => $filename,
+                'avatarUrl' => $avatarUrl,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'No file uploaded',
+            ], 400);
         }
     }
 

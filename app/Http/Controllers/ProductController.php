@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -10,11 +11,12 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $products = Product::with(['productType', 'productImages'])->paginate(10);
         if (request()->wantsJson()) {
             return response()->json([
-                'products' => Product::with(['productType', 'productImages'])->get(),
+                'products' => $products,
             ]);
         }
         return inertia('Products/Index', [
@@ -75,5 +77,28 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    /**
+     * Search for a product.
+     */
+
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $products = Product::where('name', 'like', '%' . $request->query('s') . '%')->get();
+            if ($products->isEmpty()) {
+                return response()->json([
+                    'message' => 'No products found for the search query.',
+                ], 404);
+            }
+            return response()->json([
+                'products' => $products,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while searching for products.',
+            ], 500);
+        }
     }
 }

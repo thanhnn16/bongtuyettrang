@@ -21,12 +21,13 @@ use App\Models\User;
 */
 
 Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
-Route::post('login', [User::class, 'login'])->name('login');
+Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 Route::post('check-phone-number', [RegisteredUserController::class, 'checkPhoneNumber'])->name('check-phone-number');
 
-Route::get('products', [ProductController::class, 'index'])->name('products.index');
+Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
 Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('products', [ProductController::class, 'index'])->name('products.index');
 
 Route::get('services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('services/{service}', [ServiceController::class, 'show'])->name('services.show');
@@ -34,5 +35,7 @@ Route::get('services/{service}', [ServiceController::class, 'show'])->name('serv
 // Authorization = Bearer [API token]
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware('checkUser');
-    Route::put('/user', [UserController::class, 'update'])->name('user.update')->middleware('checkUser');
+    Route::put('/user/update', [UserController::class, 'update'])->name('user.update')->middleware('checkUser');
+    // routes/api.php
+    Route::post('/user/upload-avatar', [UserController::class, 'uploadAvatar'])->name('user.uploadAvatar')->middleware('auth:sanctum');
 });
