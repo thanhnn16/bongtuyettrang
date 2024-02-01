@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductType;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductTypeController extends Controller
@@ -10,10 +11,14 @@ class ProductTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $productTypes = ProductType::all();
+        return response()->json([
+            'data' => $productTypes,
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -36,7 +41,9 @@ class ProductTypeController extends Controller
      */
     public function show(ProductType $productType)
     {
-        //
+        return response()->json([
+            'data' => $productType,
+        ]);
     }
 
     /**

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -27,7 +28,11 @@ Route::post('check-phone-number', [RegisteredUserController::class, 'checkPhoneN
 
 Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
 Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('products/category/{type}', [ProductController::class, 'showByType'])->name('products.showByType');
 Route::get('products', [ProductController::class, 'index'])->name('products.index');
+
+Route::get('product-types', [ProductTypeController::class, 'index'])->name('product-types');
+Route::get('product-types/{productType}', [ProductTypeController::class, 'show'])->name('product-types.show');
 
 Route::get('services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('services/{service}', [ServiceController::class, 'show'])->name('services.show');

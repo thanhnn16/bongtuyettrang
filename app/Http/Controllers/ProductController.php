@@ -55,12 +55,21 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
+//showByType
+
+    public function showByType($type): JsonResponse
     {
-        //
+        $products = Product::whereHas('productType', function ($query) use ($type) {
+            $query->where('id', $type);
+        })->with(['productType', 'productImages'])->get();
+        if ($products->isEmpty()) {
+            return response()->json([
+                'message' => 'No products found for the type.',
+            ], 404);
+        }
+        return response()->json([
+            'products' => $products,
+        ]);
     }
 
     /**

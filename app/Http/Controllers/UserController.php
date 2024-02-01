@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class UserController extends Controller
@@ -81,6 +82,7 @@ class UserController extends Controller
         $user = $request->user();
 
         if ($request->hasFile('avatar')) {
+            $oldAvatar = $user->avatar;
             $avatar = $request->file('avatar');
             $filename = time() . '.' . $avatar->getClientOriginalExtension();
             $avatar->storeAs('avatars', $filename, 'public');
@@ -88,8 +90,11 @@ class UserController extends Controller
             $user->avatar = $filename;
             $user->save();
 
-            $avatarUrl = asset('storage/avatars/'.$filename);
+            if ($oldAvatar) {
+                Storage::disk('public')->delete('avatars/' . $oldAvatar);
+            }
 
+            $avatarUrl = asset('storage/avatars/'.$filename);
 
             return response()->json([
                 'message' => 'Avatar uploaded successfully',
